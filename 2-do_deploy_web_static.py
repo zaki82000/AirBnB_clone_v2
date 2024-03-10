@@ -31,9 +31,16 @@ def do_pack():
 
 def do_deploy(archive_path):
     """
-    distributes an archive to your web server
+    Distributes an archive to your web servers.
+
+    Args:
+        archive_path (str): The path to the archive file to be deployed.
+
+    Returns:
+        bool: True if deployment is successful, False otherwise.
     """
     env.hosts = ['35.153.67.162', '34.239.254.62']
+
     if not exists(archive_path):
         return False
 
@@ -42,6 +49,7 @@ def do_deploy(archive_path):
     remote_path = '/tmp/'
     c.put(local=local_path, remote=remote_path)
     remote_filename = os.path.splitext(os.path.basename(archive_path))[0]
+
     c.run(f'tar -xvf {remote_path}{remote_filename}.tgz '
           f'-C /data/web_static/releases/{remote_filename}')
     c.run(f'rm {remote_path}{remote_filename}.tgz')
