@@ -13,7 +13,8 @@ from datetime import datetime
 
 def do_pack():
     """ Generates a .tgz archive from the contents of the
-    web_static directory. """
+    web_static directory. 
+    """
     # Create the folder versions if not exists
     local("mkdir -p versions")
     # Create the file with date format
@@ -29,6 +30,9 @@ def do_pack():
 
 
 def do_deploy(archive_path):
+    """
+    distributes an archive to your web server
+    """
     env.hosts = ['35.153.67.162', '34.239.254.62']
     if not exists(archive_path):
         return False
