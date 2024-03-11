@@ -1,63 +1,56 @@
 #!/usr/bin/python3
 """
-Fabric script that generates a .tgz archive from the contents of the
-web_static folder of my AirBnB Clone repo, using the function do_pack.
+distributes an archive to your web server
 """
-from fabric.api import local
-from fabric import Connection
-import os
 from os.path import exists
-from fabric import env
+from fabric.api import *
 from datetime import datetime
+
+env.user = 'ubuntu'
+env.hosts = [
+    '54.237.72.179',
+    '52.23.245.31'
+]
 
 
 def do_pack():
     """
-    Generates a .tgz archive from the contents of the web_static directory.
-
-    Returns:
-        str: Path to the generated archive file if successful, None otherwise.
+    generates a .tgz archive from web_static dir
     """
-    # Create the folder versions if not exists
-    local("mkdir -p versions")
-    # Create the file with date format
-    date = datetime.now()
-    date_format = date.strftime("%Y%m%d%H%M%S")
-    file_name = "versions/web_static_{}.tgz".format(date_format)
-    # Compress file
-    try:
-        local("tar -cvzf {} web_static".format(file_name))
-        return file_name
-    except Exception:
+    date = datetime.now().strftime('%Y%m%d%H%M%S')
+    path = 'versions/web_static_{}.tgz'.format(date)
+    if local(
+        'mkdir -p versions && tar -czvf {} web_static/'.format(path)
+    ).succeeded:
+        return path
+    else:
         return None
 
 
 def do_deploy(archive_path):
     """
-    Distributes an archive to your web servers.
-
-    Args:
-        archive_path (str): The path to the archive file to be deployed.
-
-    Returns:
-        bool: True if deployment is successful, False otherwise.
+    distributes an archive to your web server
     """
-    env.hosts = ['35.153.67.162', '34.239.254.62']
+    path = archive_path.split('/')[-1].split('.')[0]
 
     if not exists(archive_path):
         return False
 
-    c = Connection('ubuntu@35.153.67.162')
-    local_path = archive_path
-    remote_path = '/tmp/'
-    c.put(local=local_path, remote=remote_path)
-    remote_filename = os.path.splitext(os.path.basename(archive_path))[0]
-
-    c.run(f'tar -xvf {remote_path}{remote_filename}.tgz '
-          f'-C /data/web_static/releases/{remote_filename}')
-    c.run(f'rm {remote_path}{remote_filename}.tgz')
-    c.run("rm -f /data/web_static/current")
-    c.run(f'ln -s /data/web_static/releases/{remote_filename} '
-          f'/data/web_static/current')
+    put(archive_path, '/tmp/')
+    run('mkdir -p /data/web_static/releases/{}'.format(path))
+    run(
+        'tar -xzvf /tmp/{}.tgz -C /data/web_static/releases/{}'
+        .format(path, path)
+    )
+    run('rm -f /tmp/{}.tgz'.format(path))
+    run(
+        'mv /data/web_static/releases/{}/web_static/* \
+        /data/web_static/releases/{}'.format(path, path)
+    )
+    run('rm -f /data/web_static/current')
+    run(
+        'ln -s /data/web_static/releases/{} \
+        /data/web_static/current'.format(path)
+    )
 
     return True
