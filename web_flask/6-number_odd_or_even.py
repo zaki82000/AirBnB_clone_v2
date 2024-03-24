@@ -61,8 +61,10 @@ def display_number_template(n):
     """
     This function handles requests to the '/number_template/<n>' URL.
     It checks if the provided value <n> is an integer.
-    If <n> is an integer, it renders an HTML template named 'number_template.html'.
-    The template contains an H1 tag with the text "Number: n", where 'n' is the provided integer.
+    If <n> is an integer, it renders an
+    HTML template named 'number_template.html'.
+    The template contains an H1 tag with the text
+    "Number: n", where 'n' is the provided integer.
     """
     return render_template("5-number.html", n=n)
 
