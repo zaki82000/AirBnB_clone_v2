@@ -57,20 +57,18 @@ def display_number(n):
 
 
 @hbnb_app.route("/number_template/<int:n>", strict_slashes=False)
-def display_html(n):
+def display_number_template(n):
     """
     This function handles requests to the '/number_template/<n>' URL.
     It checks if the provided value <n> is an integer.
-    If <n> is an integer, it renders an
-    HTML template named 'number_template.html'.
-    The template contains an H1 tag with the text
-    "Number: n", where 'n' is the provided integer.
+    If <n> is an integer, it renders an HTML template named 'number_template.html'.
+    The template contains an H1 tag with the text "Number: n", where 'n' is the provided integer.
     """
     return render_template("5-number.html", n=n)
 
 
 @hbnb_app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
-def display_html(n):
+def display_number_odd_or_even(n):
     """
     This function handles requests to the '/number_odd_or_even/<n>' URL.
     It checks if the provided value <n> is an integer.
@@ -78,8 +76,7 @@ def display_html(n):
     The HTML page contains an H1 tag displaying whether the provided
     number <n> is even or odd.
     """
-    if isinstance(n, int):
-        return render_template("number_odd_or_even.html", n=n)
+    return render_template("6-number_odd_or_even.html", n=n)
 
 
 if __name__ == "__main__":
