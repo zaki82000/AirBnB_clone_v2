@@ -1,30 +1,21 @@
 #!/usr/bin/python3
-"""
-This module implements a simple Flask application.
-"""
-
+""" starts a Flask web application """
 from flask import Flask
 
-hbnb_app = Flask(__name__)
+app = Flask(__name__)
 
 
-@hbnb_app.route("/", strict_slashes=False)
-def index():
-    """
-    This function handles requests to the root URL.
-    It returns a simple greeting message.
-    """
-    return "Hello HBNB!"
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """ displays 'Hello HBNB!' """
+    return 'Hello HBNB!'
 
 
-@hbnb_app.route("/hbnb", strict_slashes=False)
+@app.route("/hbnb", strict_slashes=False)
 def hbnb():
-    """
-    This function handles requests to the '/hbnb' URL.
-    It returns a message indicating 'HBNB'.
-    """
-    return "HBNB"
+    """ displays 'HBNB' """
+    return 'HBNB'
 
 
-if __name__ == "__main__":
-    hbnb_app.run(debug=True, host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run()

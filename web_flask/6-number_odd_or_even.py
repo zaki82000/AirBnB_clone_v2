@@ -1,85 +1,58 @@
 #!/usr/bin/python3
-"""
-This module implements a simple Flask application.
-"""
-
+""" starts a Flask web application """
 from flask import Flask, render_template
 
-hbnb_app = Flask(__name__)
+app = Flask(__name__)
 
 
-@hbnb_app.route("/", strict_slashes=False)
-def index():
-    """
-    This function handles requests to the root URL.
-    It returns a simple greeting message.
-    """
-    return "Hello HBNB!"
+@app.route('/', strict_slashes=False)
+def hello_hbnb():
+    """ displays 'Hello HBNB!' """
+    return 'Hello HBNB!'
 
 
-@hbnb_app.route("/hbnb", strict_slashes=False)
+@app.route("/hbnb", strict_slashes=False)
 def hbnb():
-    """
-    This function handles requests to the '/hbnb' URL.
-    It returns a message indicating 'HBNB'.
-    """
-    return "HBNB"
+    """ displays 'HBNB' """
+    return 'HBNB'
 
 
-@hbnb_app.route("/c/<text>", strict_slashes=False)
-def display_c(text):
-    """
-    This function handles requests to the '/c/<text>' URL.
-    It returns "C " followed by the value of the text variable
-    with underscores replaced by spaces.
-    """
-    return "C " + text.replace("_", " ")
+@app.route('/c/<text>', strict_slashes=False)
+def c_is_fun(text):
+    """  displays 'C' followed by the value of the text variable """
+    return f'C {text.replace("_", " ")}'
 
 
-@hbnb_app.route("/python/", defaults={'text': "is cool"}, strict_slashes=False)
-@hbnb_app.route("/python/<text>", strict_slashes=False)
-def display_python(text):
+@app.route('/python', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def python_is_cool(text='is_cool'):
     """
-    This function handles requests to the '/python/<text>' URL.
-    It returns "Python " followed by the value of the text variable
-    with underscores replaced by spaces. The default value of text is "is cool"
+    displays 'Python' followed by the value of the text variable
+    with default value of text is 'is cool'
     """
-    return "Python " + text.replace("_", " ")
+    return f'Python {text.replace("_", " ")}'
 
 
-@hbnb_app.route("/number/<int:n>", strict_slashes=False)
-def display_number(n):
-    """
-    This function handles requests to the'/number/<n>'URL where <n> is a number
-    It returns a message indicating that <n> is a number.
-    """
-    return f"{n} is a number"
+@app.route('/number/<int:number>', strict_slashes=False)
+def its_a_number(number):
+    """ displays 'n is a number' only if n is an integer """
+    return f'{number} is a number'
 
 
-@hbnb_app.route("/number_template/<int:n>", strict_slashes=False)
-def display_number_template(n):
-    """
-    This function handles requests to the '/number_template/<n>' URL.
-    It checks if the provided value <n> is an integer.
-    If <n> is an integer, it renders an
-    HTML template named 'number_template.html'.
-    The template contains an H1 tag with the text
-    "Number: n", where 'n' is the provided integer.
-    """
-    return render_template("5-number.html", n=n)
+@app.route('/number_template/<int:number>', strict_slashes=False)
+def number_template(number):
+    """ displays a HTML page only if n is an integer """
+    return render_template('5-number.html', number=number)
 
 
-@hbnb_app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
-def display_number_odd_or_even(n):
+@app.route('/number_odd_or_even/<int:number>', strict_slashes=False)
+def number_odd_or_even(number):
     """
-    This function handles requests to the '/number_odd_or_even/<n>' URL.
-    It checks if the provided value <n> is an integer.
-    If <n> is an integer, it renders an HTML page.
-    The HTML page contains an H1 tag displaying whether the provided
-    number <n> is even or odd.
+    displays a HTML page only if n is an integer
+    with H1 tag: 'Number: n is even|odd' inside the tag BODY
     """
-    return render_template("6-number_odd_or_even.html", n=n)
+    return render_template('6-number_odd_or_even.html', number=number)
 
 
-if __name__ == "__main__":
-    hbnb_app.run(debug=True, host='0.0.0.0', port=5000)
+if __name__ == '__main__':
+    app.run()

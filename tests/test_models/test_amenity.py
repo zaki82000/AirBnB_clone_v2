@@ -2,8 +2,14 @@
 """ """
 from tests.test_models.test_base_model import test_basemodel
 from models.amenity import Amenity
+from os import getenv
+import unittest
 
 
+@unittest.skipIf(
+    getenv('HBNB_TYPE_STORAGE') == 'db',
+    'not file storage'
+)
 class test_Amenity(test_basemodel):
     """ """
 
